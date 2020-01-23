@@ -5,15 +5,16 @@ import { RouterModule } from "@angular/router";
 import { HttpClientModule } from "@angular/common/http";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./components/home/home.component";
-import { UsersComponent } from "./components/users/users.component";
+import { UserModule } from "./components/users/user.module";
 import { AppRoutingModule } from "./app-routing.module";
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, UsersComponent],
+  declarations: [AppComponent, HomeComponent],
   imports: [
     BrowserModule,
     FormsModule,
     RouterModule,
+    UserModule,
     AppRoutingModule,
     HttpClientModule
   ],
