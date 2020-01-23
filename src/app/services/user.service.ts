@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { IUser } from "../models/user";
 import { Observable, throwError } from "rxjs";
-import { tap, catchError } from "rxjs/operators";
+import { tap, catchError, map } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -11,10 +11,21 @@ export class UserService {
   userUrl: string = "https://jsonplaceholder.typicode.com/users";
   constructor(private http: HttpClient) {}
 
+  // GET all users
   getUsers(): Observable<IUser[]> {
-    return this.http
-      .get<IUser[]>(this.userUrl)
-      .pipe(tap(console.log), catchError(this.handleError));
+    return this.http.get<IUser[]>(this.userUrl).pipe(
+      tap(_ => console.log("Getting users...")),
+      catchError(this.handleError)
+    );
+  }
+
+  // GET a user
+  getUser(id: number): Observable<IUser> {
+    return this.getUsers().pipe(
+      tap(users => console.log("Users found: ", users.length)),
+      map(users => users.find(user => user.id === id)),
+      tap(user => console.log("User found: ", user))
+    );
   }
 
   private handleError(err: HttpErrorResponse) {
