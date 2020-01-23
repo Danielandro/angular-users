@@ -3,9 +3,11 @@
 </div>
 <div *ngIf="users$ | async as users; else errorOccured">
   <ul *ngFor="let user of users" class="list-group">
-    <li class="list-group-item">
-      <p>{{ user.username }}</p>
-    </li>
+    <a [routerLink]="['/users', user.id]">
+      <li class="list-group-item">
+        <p>{{ user.username }}</p>
+      </li>
+    </a>
   </ul>
 </div>
 <!-- If unable to retrieve users -->

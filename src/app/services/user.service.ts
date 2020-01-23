@@ -24,7 +24,8 @@ export class UserService {
     return this.getUsers().pipe(
       tap(users => console.log("Users found: ", users.length)),
       map(users => users.find(user => user.id === id)),
-      tap(user => console.log("User found: ", user))
+      tap(user => console.log("User found: ", user)),
+      catchError(this.handleError)
     );
   }
 
