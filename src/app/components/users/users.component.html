@@ -1,0 +1,18 @@
+<div class="jumbotron">
+  <h1 class="display-4">{{ pageTitle }}</h1>
+</div>
+<div *ngIf="users$ | async as users; else errorOccured">
+  <ul *ngFor="let user of users" class="list-group">
+    <a [routerLink]="['/users', user.id]">
+      <li class="list-group-item">
+        <p>{{ user.username }}</p>
+      </li>
+    </a>
+  </ul>
+</div>
+<!-- If unable to retrieve users -->
+<ng-template #errorOccured>
+  <div>
+    {{ errorMessage }}
+  </div>
+</ng-template>
