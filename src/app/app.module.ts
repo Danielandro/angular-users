@@ -6,6 +6,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./components/home/home.component";
 import { UserModule } from "./components/users/user.module";
+import { PostModule } from "./components/posts/post.module";
 import { AppRoutingModule } from "./app-routing.module";
 
 @NgModule({
@@ -15,6 +16,7 @@ import { AppRoutingModule } from "./app-routing.module";
     FormsModule,
     RouterModule,
     UserModule,
+    PostModule,
     AppRoutingModule,
     HttpClientModule
   ],
