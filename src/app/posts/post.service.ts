@@ -2,19 +2,24 @@ import { Injectable } from "@angular/core";
 import { Observable, throwError } from "rxjs";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { IPost } from "./models/post";
-import { tap, catchError } from "rxjs/operators";
+import { tap, catchError, shareReplay } from "rxjs/operators";
 import { UserService } from "../users/user.service";
 
+class Hello {
+  constructor(public world: string) {}
+}
 @Injectable({
   providedIn: "root"
 })
 export class PostService {
   postUrl: string = "https://jsonplaceholder.typicode.com/posts";
   constructor(private http: HttpClient, private userService: UserService) {}
+  hello = new Hello("Earth");
 
   getPosts(): Observable<IPost[]> {
     return this.http.get<IPost[]>(this.postUrl).pipe(
       tap(posts => console.log("Getting posts")),
+      shareReplay(1),
       catchError(this.handleError)
     );
   }
@@ -24,6 +29,10 @@ export class PostService {
       tap(post => console.log("Getting book...")),
       catchError(this.handleError)
     );
+  }
+
+  returnHello() {
+    return this.hello;
   }
 
   // getPostWithUser(id: number): Observable<any> {
