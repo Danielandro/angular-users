@@ -1,0 +1,16 @@
+<div class="jumbotron">
+  <h1 class="display-4">{{ pageTitle }}</h1>
+</div>
+<div class="card-columns">
+  <div *ngFor="let post of posts$ | async" class="card">
+    <div class="card-body">
+      <h5 class="card-title">{{ post.title }}</h5>
+      <a class="btn btn-primary" [routerLink]="['/posts', post.id]"
+        >Read Post</a
+      >
+      <p class="card-text">
+        <small class="text-muted">Posted by user id: {{ post.userId }}</small>
+      </p>
+    </div>
+  </div>
+</div>
