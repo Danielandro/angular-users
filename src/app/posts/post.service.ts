@@ -13,13 +13,14 @@ class Hello {
 })
 export class PostService {
   postUrl: string = "https://jsonplaceholder.typicode.com/posts";
+  allPosts: Observable<IPost[]> = this.http
+    .get<IPost[]>(this.postUrl)
+    .pipe(shareReplay(1)); // shareReplay adds caching
   constructor(private http: HttpClient, private userService: UserService) {}
-  hello = new Hello("Earth");
 
   getPosts(): Observable<IPost[]> {
-    return this.http.get<IPost[]>(this.postUrl).pipe(
+    return this.allPosts.pipe(
       tap(posts => console.log("Getting posts")),
-      shareReplay(1),
       catchError(this.handleError)
     );
   }
@@ -29,10 +30,6 @@ export class PostService {
       tap(post => console.log("Getting book...")),
       catchError(this.handleError)
     );
-  }
-
-  returnHello() {
-    return this.hello;
   }
 
   // getPostWithUser(id: number): Observable<any> {
