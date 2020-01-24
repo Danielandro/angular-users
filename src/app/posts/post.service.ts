@@ -1,25 +1,53 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { HttpClient } from "@angular/common/http";
+import { Observable, throwError } from "rxjs";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { IPost } from "./models/post";
-import { tap, map } from "rxjs/operators";
+import { tap, catchError } from "rxjs/operators";
+import { UserService } from "../users/user.service";
 
 @Injectable({
   providedIn: "root"
 })
 export class PostService {
   postUrl: string = "https://jsonplaceholder.typicode.com/posts";
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   getPosts(): Observable<IPost[]> {
-    return this.http
-      .get<IPost[]>(this.postUrl)
-      .pipe(tap(posts => console.log("Getting posts")));
+    return this.http.get<IPost[]>(this.postUrl).pipe(
+      tap(posts => console.log("Getting posts")),
+      catchError(this.handleError)
+    );
   }
 
   getPost(id: number): Observable<IPost> {
-    return this.getPosts().pipe(
-      map(posts => posts.find(post => post.id === id))
+    return this.http.get<IPost>(`${this.postUrl}/${id}`).pipe(
+      tap(post => console.log("Getting book...")),
+      catchError(this.handleError)
     );
+  }
+
+  // getPostWithUser(id: number): Observable<any> {
+  //   // get userId from the post
+  //   return this.getPost(id).pipe(
+  //     concatMap(post => this.userService.getUser(post.userId))
+  //   )
+  //   // use that to get the user
+  //   // return both pieces of info to the template
+  // };
+
+  private handleError(err: HttpErrorResponse) {
+    // in the real world, we may send the server to some remote logging infrastructure
+    // instead of logging to the console
+    let errorMessage: string;
+    if (err.error instanceof ErrorEvent) {
+      // A client-side or network error occured. Handle it accordingly!
+      errorMessage = `An error occured: ${err.error.message}`;
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong
+      errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
+    }
+    console.log(errorMessage);
+    return throwError(errorMessage);
   }
 }
