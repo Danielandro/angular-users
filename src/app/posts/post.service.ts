@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
-import { IPost } from "./post";
-import { tap } from "rxjs/operators";
+import { IPost } from "./models/post";
+import { tap, map } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -14,6 +14,12 @@ export class PostService {
   getPosts(): Observable<IPost[]> {
     return this.http
       .get<IPost[]>(this.postUrl)
-      .pipe(tap(posts => console.log("Posts: ", posts)));
+      .pipe(tap(posts => console.log("Getting posts")));
+  }
+
+  getPost(id: number): Observable<IPost> {
+    return this.getPosts().pipe(
+      map(posts => posts.find(post => post.id === id))
+    );
   }
 }
