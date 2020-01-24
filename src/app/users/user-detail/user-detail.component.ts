@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { IUser } from "src/app/models/user";
-import { UserService } from "../../../services/user.service";
+import { IUser } from "src/app/users/user";
+import { UserService } from "../user.service";
 import { Observable } from "rxjs";
 import { Router, ActivatedRoute } from "@angular/router";
 import { switchMap } from "rxjs/operators";

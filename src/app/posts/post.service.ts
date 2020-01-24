@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
-import { IPost } from "../models/post";
+import { IPost } from "./post";
 import { tap } from "rxjs/operators";
 
 @Injectable({

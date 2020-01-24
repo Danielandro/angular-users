@@ -1,12 +1,12 @@
 import { Component, OnInit } from "@angular/core";
-import { PostService } from "../../services/post.service";
-import { IPost } from "src/app/models/post";
+import { PostService } from "../post.service";
+import { IPost } from "src/app/posts/post";
 import { Observable } from "rxjs";
 
 @Component({
-  selector: "app-posts",
-  templateUrl: "./posts.component.html",
-  styleUrls: ["./posts.component.css"]
+  selector: "app-post",
+  templateUrl: "./post-list.component.html",
+  styleUrls: ["./post-list.component.css"]
 })
 export class PostsComponent implements OnInit {
   pageTitle: string = "Posts";

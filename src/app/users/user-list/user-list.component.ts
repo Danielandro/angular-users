@@ -1,12 +1,12 @@
 import { Component, OnInit } from "@angular/core";
-import { IUser } from "../../models/user";
-import { UserService } from "../../services/user.service";
+import { IUser } from "../user";
+import { UserService } from "../user.service";
 import { Observable } from "rxjs";
 
 @Component({
   selector: "app-users",
-  templateUrl: "./users.component.html",
-  styleUrls: ["./users.component.css"]
+  templateUrl: "./user-list.component.html",
+  styleUrls: ["./user-list.component.css"]
 })
 export class UsersComponent implements OnInit {
   pageTitle: string = "Users";
