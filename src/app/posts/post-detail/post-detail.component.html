@@ -8,7 +8,7 @@
       {{ post.body }}
     </p>
     <p class="card-text">
-      <small class="text-muted">Posted by user id: {{ post.userId }}</small>
+      <small class="text-muted">Posted by {{ username$ | async }}</small>
     </p>
     <a class="btn btn-secondary" (click)="goBack()"
       ><i class="fa fa-chevron-left"></i> Back</a

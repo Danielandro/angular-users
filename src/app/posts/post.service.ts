@@ -1,9 +1,14 @@
 import { Injectable } from "@angular/core";
-import { Observable, throwError } from "rxjs";
+import { Observable, throwError, forkJoin, of } from "rxjs";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { IPost } from "./models/post";
-import { tap, catchError, shareReplay } from "rxjs/operators";
-import { UserService } from "../users/user.service";
+import {
+  tap,
+  catchError,
+  shareReplay,
+  map,
+  distinctUntilChanged
+} from "rxjs/operators";
 
 class Hello {
   constructor(public world: string) {}
@@ -12,11 +17,13 @@ class Hello {
   providedIn: "root"
 })
 export class PostService {
-  postUrl: string = "https://jsonplaceholder.typicode.com/posts";
-  allPosts: Observable<IPost[]> = this.http
+  private postUrl: string = "https://jsonplaceholder.typicode.com/posts";
+  private allPosts: Observable<IPost[]> = this.http
     .get<IPost[]>(this.postUrl)
-    .pipe(shareReplay(1)); // shareReplay adds caching
-  constructor(private http: HttpClient, private userService: UserService) {}
+    // shareReplay caches the response, distinct only updates data if it changes
+    .pipe(distinctUntilChanged(), shareReplay(1));
+
+  constructor(private http: HttpClient) {}
 
   getPosts(): Observable<IPost[]> {
     return this.allPosts.pipe(
@@ -25,21 +32,20 @@ export class PostService {
     );
   }
 
+  // both are the same
   getPost(id: number): Observable<IPost> {
-    return this.http.get<IPost>(`${this.postUrl}/${id}`).pipe(
+    return this.allPosts.pipe(
+      map(posts => posts.find(post => post.id === id)),
       tap(post => console.log("Getting book...")),
       catchError(this.handleError)
     );
   }
 
-  // getPostWithUser(id: number): Observable<any> {
-  //   // get userId from the post
-  //   return this.getPost(id).pipe(
-  //     concatMap(post => this.userService.getUser(post.userId))
-  //   )
-  //   // use that to get the user
-  //   // return both pieces of info to the template
-  // };
+  getPostById(id: number) {
+    return this.http
+      .get(`${this.postUrl}/${id}`)
+      .pipe(tap(console.log), catchError(this.handleError));
+  }
 
   private handleError(err: HttpErrorResponse) {
     // in the real world, we may send the server to some remote logging infrastructure
